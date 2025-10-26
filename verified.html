@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Verified Indian Product</title>
 <link rel="stylesheet" href="style.css">
+
+<!-- QR Scanner Library -->
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
 <header>Government of India | Ministry of Education - Demo Page</header>
@@ -16,12 +19,18 @@
 <p>This product is verified as <strong>Made in India</strong> under the <strong>Swadeshi Mark</strong> initiative.</p>
 <p>यह उत्पाद <strong>स्वदेशी मार्क</strong> पहल के तहत भारतीय उत्पाद के रूप में प्रमाणित है।</p>
 
-<!-- Added Manufacturer, Date, Time -->
+<!-- Product Details -->
 <p><strong>Manufacturer:</strong> TATA Tea Ltd.</p>
 <p><strong>Date of Manufacturing:</strong> 2025-09-15</p>
 <p><strong>Time of Manufacturing:</strong> 10:30 AM</p>
 
-<button onclick="window.location.href='fake.html'">Scan Another Product</button>
+<!-- Scan Button -->
+<button id="scan-btn">Scan Another Product</button>
+
+<!-- QR Scanner Container -->
+<div id="qr-reader" style="width:300px; margin:20px auto; display:none;"></div>
+<div id="qr-result" style="text-align:center; font-weight:bold; margin-top:10px;"></div>
+
 <p style="margin-top:30px;font-size:14px;color:#888;">DEMO - NOT AN OFFICIAL PAGE</p>
 </section>
 
@@ -29,5 +38,39 @@
 Team VIVEKANAND | PM SHRI KENDRIYA VIDYALAYA RAILWAY GANDHIDHAM<br>
 Mentor: Mr. Yashpal Singla (PGT Commerce)
 </footer>
+
+<script>
+  const scanBtn = document.getElementById("scan-btn");
+  const qrReader = document.getElementById("qr-reader");
+  const qrResult = document.getElementById("qr-result");
+  let html5QrcodeScanner;
+
+  scanBtn.addEventListener("click", () => {
+    scanBtn.style.display = "none"; // hide button
+    qrReader.style.display = "block"; // show QR scanner
+
+    html5QrcodeScanner = new Html5Qrcode("qr-reader");
+
+    const config = { fps: 10, qrbox: 250 };
+
+    html5QrcodeScanner.start(
+      { facingMode: "environment" },
+      config,
+      (decodedText, decodedResult) => {
+        qrResult.textContent = "QR Code: " + decodedText;
+        html5QrcodeScanner.stop().then(() => {
+          scanBtn.style.display = "block"; // show button again
+          qrReader.style.display = "none"; // hide scanner
+        });
+      },
+      (errorMessage) => {
+        // optional: ignore scanning errors
+      }
+    ).catch(err => {
+      console.error(err);
+    });
+  });
+</script>
+
 </body>
 </html>
