@@ -27,8 +27,8 @@
 <!-- Scan Button -->
 <button id="scan-btn">Scan Another Product</button>
 
-<!-- QR Scanner Container -->
-<div id="qr-reader" style="width:300px; margin:20px auto; display:none;"></div>
+<!-- QR Scanner Container (hidden initially but shown properly) -->
+<div id="qr-reader" style="width:300px; margin:20px auto;"></div>
 <div id="qr-result" style="text-align:center; font-weight:bold; margin-top:10px;"></div>
 
 <p style="margin-top:30px;font-size:14px;color:#888;">DEMO - NOT AN OFFICIAL PAGE</p>
@@ -47,10 +47,10 @@ Mentor: Mr. Yashpal Singla (PGT Commerce)
 
   scanBtn.addEventListener("click", () => {
     scanBtn.style.display = "none"; // hide button
-    qrReader.style.display = "block"; // show QR scanner
+    qrReader.innerHTML = "";        // clear previous scans if any
 
+    // Initialize scanner
     html5QrcodeScanner = new Html5Qrcode("qr-reader");
-
     const config = { fps: 10, qrbox: 250 };
 
     html5QrcodeScanner.start(
@@ -60,14 +60,14 @@ Mentor: Mr. Yashpal Singla (PGT Commerce)
         qrResult.textContent = "QR Code: " + decodedText;
         html5QrcodeScanner.stop().then(() => {
           scanBtn.style.display = "block"; // show button again
-          qrReader.style.display = "none"; // hide scanner
+          qrReader.innerHTML = "";          // clear scanner
         });
       },
       (errorMessage) => {
-        // optional: ignore scanning errors
+        // ignore scan errors
       }
     ).catch(err => {
-      console.error(err);
+      console.error("Unable to start QR scanner:", err);
     });
   });
 </script>
